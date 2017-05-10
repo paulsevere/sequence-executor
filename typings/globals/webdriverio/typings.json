@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/28924690db8c6e9845ca8eb9855abc2ec3a4933b/webdriverio/index.d.ts",
+    "raw": "registry:dt/webdriverio#4.6.0+20170314191220",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/28924690db8c6e9845ca8eb9855abc2ec3a4933b/webdriverio/index.d.ts"
+  }
+}
