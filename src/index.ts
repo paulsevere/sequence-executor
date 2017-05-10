@@ -1,10 +1,8 @@
 import { map } from 'ramda';
 import * as Promise from 'bluebird';
+import { sequence } from './lib/sequence'
 import { remote } from 'webdriverio';
 
-interface SeqError {
-  message: string, remainingSteps: any[]
-}
 
 const vehicle = {
   year: '2017',
@@ -51,40 +49,6 @@ const steps = [
   clickPageButton,
   () => b.element('#pageButtonAdditionalDriver').click()
 ]
-
-var count = 0;
-
-
-
-function sequence(_steps: any[]) {
-  return new Promise(function (resolve, reject) {
-    console.log(count)
-
-    let fn = _steps[0];
-    if (!fn) {
-      return resolve();
-    }
-
-    (Array.isArray(fn) ? sequence(fn) : fn)().then((res: any) => {
-      _steps.shift()
-      count = 0;
-      sequence(_steps)
-    }).catch((err: SeqError) => {
-
-
-      if (count > 50) {
-        return reject({ message: `${fn.toString()} failed !!!!!`, remainingSteps: _steps });
-      }
-
-      count += 1;
-
-      setTimeout(() => {
-        sequence(_steps);
-      }, 50)
-
-    })
-  })
-}
 
 
 sequence(steps).then(console.log).catch(err => console.log(err.message))
