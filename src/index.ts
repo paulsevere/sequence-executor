@@ -1,55 +1,36 @@
 import { map } from 'ramda';
 import * as Promise from 'bluebird';
 import { sequence } from './lib/sequence'
-import { remote } from 'webdriverio';
-
-
-const vehicle = {
-  year: '2017',
-  make: 'CHEVROLET',
-  model: 'BOLT EV',
-  trim: 'LT',
-  bodyStyle: '4 Door Hatchback',
-  purchaseYear: '2016',
-  address: '123 Test St',
-  mileage: 12000
-};
-
-
-const b = remote({
-  desiredCapabilities: { browserName: 'chrome' }
-});
-
-
-const clickPageButton = () => b.element('.pageButton').click();
-const clickRadioLabel = (option: string) => () => b.element(`label[for="${option}"]`).click();
-const dropDown = (name: string, value: string | number) => () => b.element(`//select[@name='${name}']/option[text()='${value + ''}']`).click();
-const enterData = (selector: string, value: string | number) => () => b.setValue(selector, value);
+import { dropDown, clickPageButton, waitForPageButton, goToUrl, init, clickRadioLabel, enterData, clickAdditionalDriver, browser } from './actions/common'
 
 
 
-const steps = [
-  b.init.bind(b),
-  () => b.url('http://localhost:3000/?zipCode=85004'),
-  () => b.element('.pageButton'),
-  dropDown('year', vehicle.year),
-  dropDown('make', vehicle.make),
-  dropDown('model', vehicle.model),
-  dropDown('fullModelName', vehicle.trim),
-  dropDown('bodyStyle', vehicle.bodyStyle),
-  clickPageButton,
-  dropDown('purchaseYear', vehicle.purchaseYear),
-  clickRadioLabel('purchasedNew01'),
-  clickRadioLabel('ownership01'),
-  clickPageButton,
-  clickRadioLabel('primaryUse03'),
-  enterData('#annualDistance', vehicle.mileage),
-  clickPageButton,
-  enterData('#streetAddress', vehicle.address),
-  clickPageButton,
-  () => b.element('#pageButtonAdditionalDriver').click()
+export default [
+  init,
+  () => browser.url('https://www.jsbin.com'),
+  () => browser.windowHandleSize({ width: 1500, height: 1000 }),
+
+  () => browser.element('#createnew').click(),
+  () => browser.pause(1000),
+  () => browser.element("#panels > a:nth-child(3)").click(),
+  () => browser.element('//*[@id="panels"]/a[4]').click(),
+
+  () => browser.element('//*[@id="source"]/div[5]/div/div[2]/div/div[6]/div[1]/div/div/div/div[5]/div/pre').click(),
+  () => browser.keys("console.log('Wow its so coool')"),
+  () => browser.element('#runwithalerts').click(),
 ]
+// sequence()
 
 
-sequence(steps).then(console.log).catch(err => console.log(err.message))
 
+
+
+
+
+
+// import vehicleSteps from './sequences/addVehicle'
+// import driverSteps from './sequences/addDriver'
+// import additionalDriverSteps from './sequences/addAdditionalDriver'
+// import incidentSteps from './sequences/addIncident'
+// import discountSteps from './sequences/addDiscounts'
+// sequence([...vehicleSteps, ...driverSteps, ...additionalDriverSteps]).then(console.log).catch(err => console.log(err.message))
